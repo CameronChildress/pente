@@ -7,7 +7,7 @@ public class Board : MonoBehaviour
     public static Board Instance { get { return instance; } }
     private static Board instance;
 
-    private Space[,] spaces = new Space[19, 19];
+    private BoardSpace[,] spaces = new BoardSpace[19, 19];
 
     private void Awake()
     {
@@ -29,7 +29,7 @@ public class Board : MonoBehaviour
 
     public bool PlacePiece(Vector2Int position, bool isPlayer1, out bool isCapture, out bool isWin)
     {
-        if (spaces[position.x, position.y].state != Space.eSpaceState.Empty)
+        if (spaces[position.x, position.y].state != BoardSpace.eSpaceState.Empty)
         {
             
             isCapture = false;
@@ -40,22 +40,18 @@ public class Board : MonoBehaviour
         {
             if(isPlayer1)
             {
-                spaces[position.x, position.y].state = Space.eSpaceState.Player1;
+                spaces[position.x, position.y].state = BoardSpace.eSpaceState.Player1;
 
             }
             else
             {
-                spaces[position.x, position.y].state = Space.eSpaceState.Player2;
+                spaces[position.x, position.y].state = BoardSpace.eSpaceState.Player2;
 
             }
         }
 
         isCapture = CheckForCapture(position);
         isWin = CheckForWin(position);
-
-
-
-
 
         return true;
     }

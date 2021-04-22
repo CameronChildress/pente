@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Space : MonoBehaviour
+public class BoardSpace : MonoBehaviour
 {
     public enum eSpaceState
     {
