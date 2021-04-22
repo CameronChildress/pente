@@ -22,8 +22,8 @@ public class Game : MonoBehaviour
     
 
 
-    public Game Instance { get { return instance; } }
-    private Game instance;
+    public static Game Instance { get { return instance; } }
+    private static Game instance;
 
     private void Awake()
     {
@@ -95,8 +95,6 @@ public class Game : MonoBehaviour
 
     public bool PiecePlaced(Vector2Int position)
     {
-        
-
-        return false;
+        return Board.Instance.PlacePiece(position, true, out bool isCapture, out bool isWin);
     }
 }

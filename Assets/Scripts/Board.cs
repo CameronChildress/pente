@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class Board : MonoBehaviour
 {
-    public Board Instance { get { return instance; } }
-    private Board instance;
+    public static Board Instance { get { return instance; } }
+    private static Board instance;
 
     private Space[,] spaces = new Space[19, 19];
 
