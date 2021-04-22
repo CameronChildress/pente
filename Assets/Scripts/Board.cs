@@ -6,6 +6,8 @@ public class Board : MonoBehaviour
 {
     public static Board Instance { get { return instance; } }
     private static Board instance;
+    public GameObject p1Piece;
+    public GameObject p2Piece;
 
     private BoardSpace[,] spaces = new BoardSpace[19, 19];
 
@@ -29,6 +31,25 @@ public class Board : MonoBehaviour
 
     public bool PlacePiece(Vector2Int position, bool isPlayer1, out bool isCapture, out bool isWin)
     {
+        //Debug.Log("eat my balls pente");
+        if (spaces[position.x, position.y] == null)
+        {
+            spaces[position.x, position.y] = new BoardSpace();
+        }
+        if (isPlayer1)
+        {
+            spaces[position.x, position.y].state = BoardSpace.eSpaceState.Player1;
+            Instantiate(p1Piece, new Vector3(30 * position.x, 30 * position.y, 0) + new Vector3(74, 74, 0), Quaternion.identity, this.transform);
+            //Debug.Log("My nuts player 1");
+
+        }
+        else
+        {
+            spaces[position.x, position.y].state = BoardSpace.eSpaceState.Player2;
+            Instantiate(p2Piece, new Vector3(30 * position.x, 30 * position.y, 0) + new Vector3(74, 74, 0), Quaternion.identity, this.transform);
+            //Debug.Log("My nuts player 2");
+
+        }
         if (spaces[position.x, position.y].state != BoardSpace.eSpaceState.Empty)
         {
             
@@ -38,16 +59,7 @@ public class Board : MonoBehaviour
         }
         else
         {
-            if(isPlayer1)
-            {
-                spaces[position.x, position.y].state = BoardSpace.eSpaceState.Player1;
 
-            }
-            else
-            {
-                spaces[position.x, position.y].state = BoardSpace.eSpaceState.Player2;
-
-            }
         }
 
         isCapture = CheckForCapture(position);
