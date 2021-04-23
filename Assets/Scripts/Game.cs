@@ -29,6 +29,7 @@ public class Game : MonoBehaviour
     {
         switch (GameState)
         {
+<<<<<<< Updated upstream
             case eState.Title:
                 GameState = eState.StartGame;
                 break;
@@ -42,6 +43,32 @@ public class Game : MonoBehaviour
                 }
                 else
                 {
+=======
+            Vector2Int position = GetPosition();
+            if (position != -Vector2Int.one)
+            {
+                PiecePlaced(position);
+               
+                isPlayer1 = !isPlayer1;
+            }
+            else Debug.Log("Position was negative: " + position.ToString());
+        }
+        //switch (GameState)
+        //{
+        //    case eState.Title:
+        //        GameState = eState.StartGame;
+        //        break;
+        //    case eState.StartGame:
+        //        GameState = eState.Player1Turn;
+        //        break;
+        //    case eState.Player1Turn:
+        //        if (PiecePlaced(TakeTurn()))
+        //        {
+        //            GameState = eState.Player2Turn;
+        //        }
+        //        else
+        //        {
+>>>>>>> Stashed changes
 
                 }
                 break;
@@ -73,5 +100,14 @@ public class Game : MonoBehaviour
 
     }
 
+<<<<<<< Updated upstream
 
+=======
+    public bool PiecePlaced(Vector2Int position)
+    {
+        bool success = Board.Instance.PlacePiece(position, isPlayer1, out bool isCapture, out bool isWin);
+        Debug.Log("Win? : " + isWin);
+        return success;
+    }
+>>>>>>> Stashed changes
 }
