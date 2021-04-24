@@ -16,6 +16,17 @@ public class Board : MonoBehaviour
         instance = this;
     }
 
+    private void Start()
+    {
+        for (int i = 0; i < 19; i++)
+        {
+            for (int j = 0; j < 19; j++)
+            {
+                spaces[i, j] = new BoardSpace() { state = BoardSpace.eSpaceState.Empty };
+            }
+        }
+    }
+
 
 
     public bool PlacePiece(Vector2Int position, bool isPlayer1, out bool isCapture, out bool isWin)
@@ -23,22 +34,9 @@ public class Board : MonoBehaviour
 
         isWin = false;
         isCapture = false;
-        //if the current space hasnt been places in yet, make a new space
-        if (spaces[position.x, position.y] == null)
-        {
-            spaces[position.x, position.y] = new BoardSpace();
-        }
-
-        //if the current space is occupied, return false (piece cannot be placed)
-        if (spaces[position.x, position.y].state == BoardSpace.eSpaceState.Player1 || spaces[position.x, position.y].state == BoardSpace.eSpaceState.Player2)
-        {
-            isCapture = false;
-            isWin = false;
-            return false;
-        }
 
         //Player 1 places a piece
-        if (isPlayer1)
+        if (isPlayer1 && spaces[position.x, position.y].state == BoardSpace.eSpaceState.Empty)
         {
             //set that position to player 1
             spaces[position.x, position.y].state = BoardSpace.eSpaceState.Player1;
@@ -47,16 +45,22 @@ public class Board : MonoBehaviour
             Instantiate(p1Piece, new Vector3(30 * position.x, 30 * position.y, 0) + new Vector3(74, 74, 0), Quaternion.identity, this.transform);
 
             //Check if there is a win condition at that place
-            isWin = FindPenteWin(spaces, position.y, position.x, BoardSpace.eSpaceState.Player1, 5);
+            isWin = FindPenteWin(spaces, position.x, position.y, BoardSpace.eSpaceState.Player1, 5);
 
             //Check for a capture
             //isCapture = FindCapture()
         }
-        else // Same for player 2
+        else if(!isPlayer1 && spaces[position.x, position.y].state == BoardSpace.eSpaceState.Empty) // Same for player 2
         {
             spaces[position.x, position.y].state = BoardSpace.eSpaceState.Player2;
-            Instantiate(p1Piece, new Vector3(30 * position.x, 30 * position.y, 0) + new Vector3(74, 74, 0), Quaternion.identity, this.transform);
-            isWin = FindPenteWin(spaces, position.y, position.x, BoardSpace.eSpaceState.Player1, 5);
+            Instantiate(p2Piece, new Vector3(30 * position.x, 30 * position.y, 0) + new Vector3(74, 74, 0), Quaternion.identity, this.transform);
+            isWin = FindPenteWin(spaces, position.x, position.y, BoardSpace.eSpaceState.Player2, 5);
+        }
+        else if(spaces[position.x, position.y].state == BoardSpace.eSpaceState.Player1 || spaces[position.x, position.y].state == BoardSpace.eSpaceState.Player2)
+        {
+            isCapture = false;
+            isWin = false;
+            return false;
         }
 
         return true;
@@ -100,7 +104,6 @@ public class Board : MonoBehaviour
                 if (col >= grid.GetLength(1) || col < 0) break;
 
                 //If piece of grid equals the value passed in, increment count
-                if (grid[row, col] == null) spaces[row, col] = new BoardSpace();
                 if (grid[row, col].state == value)
                 {
                     matchCount++;
