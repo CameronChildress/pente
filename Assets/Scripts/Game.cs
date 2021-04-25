@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Timers;
 using TMPro;
 using UnityEngine;
 
@@ -25,7 +26,10 @@ public class Game : MonoBehaviour
     public TMP_InputField InputY;
 
 
+
+    float turnTime = 30;
     bool isPlayer1 = true;
+    
 
     private void Awake()
     {
@@ -34,64 +38,80 @@ public class Game : MonoBehaviour
 
     public void Update()
     {
+       bool turnEnd = GameTimer();
 
-        if(Input.GetKeyDown(KeyCode.Return))
+
+
+        switch (GameState)
         {
-            Vector2Int position = GetPosition();
-            if (position != -Vector2Int.one)
-            {
-                PiecePlaced(position);
+            case eState.Title:
+                GameState = eState.StartGame;
+                break;
+            case eState.StartGame:
+                GameState = eState.Player1Turn;
+                break;
+            case eState.Player1Turn:
 
-                isPlayer1 = !isPlayer1;
-            }
-            else Debug.Log("Position was negative: " + position.ToString());
+                Debug.Log("Start Player 1 Turn");
+
+                if (turnEnd)
+                {
+                    isPlayer1 = !isPlayer1;
+                    GameState = eState.Player2Turn;
+
+                }
+                else
+                {
+                    if (Input.GetKeyDown(KeyCode.Return))
+                    {
+                        Vector2Int position = GetPosition();
+                        if (position != -Vector2Int.one)
+                        {
+                            PiecePlaced(position);
+                            GameState = eState.Player2Turn;
+
+                            turnTime = 30;
+
+                            isPlayer1 = !isPlayer1;
+                        }
+                        else Debug.Log("Position was negative: " + position.ToString());
+                    }
+                }
+                break;
+            case eState.Player2Turn:
+                Debug.Log("Start Player 2 Turn");
+
+                if (turnEnd)
+                {
+                    isPlayer1 = !isPlayer1;
+                    GameState = eState.Player1Turn;
+                }
+                else
+                {
+
+                    if (Input.GetKeyDown(KeyCode.Return))
+                    {
+                        Vector2Int position = GetPosition();
+                        if (position != -Vector2Int.one)
+                        {
+                            PiecePlaced(position);
+                            GameState = eState.Player1Turn;
+
+                            turnTime = 30;
+
+                            isPlayer1 = !isPlayer1;
+                        }
+                        else Debug.Log("Position was negative: " + position.ToString());
+                    }
+                }
+
+                break;
+            case eState.EndGame:
+                GameState = eState.Title;
+                break;
+            default:
+                break;
         }
-
-        
-        //switch (GameState)
-        //{
-        //    case eState.Title:
-        //        GameState = eState.StartGame;
-        //        break;
-        //    case eState.StartGame:
-        //        GameState = eState.Player1Turn;
-        //        break;
-        //    case eState.Player1Turn:
-        //        if (PiecePlaced(TakeTurn()))
-        //        {
-        //            GameState = eState.Player2Turn;
-        //        }
-        //        else
-        //        {
-
-
-                //}
-        //        break;
-        //    case eState.Player2Turn:
-        //        if(PiecePlaced())
-        //        {
-        //            GameState = eState.Player1Turn;
-        //        }
-        //        else 
-        //        {
-                    
-        //        }
-        //        GameState = eState.Player1Turn;
-        //        break;
-        //    case eState.EndGame:
-        //        GameState = eState.Title;
-        //        break;
-        //    default:
-        //        break;
-       // }
-
-    }
-
-    public bool PiecePlaced()
-    {
-        bool validPlacement = false;
-        if (validPlacement) return true;
-        return false;
 
     }
 
@@ -118,6 +138,27 @@ public class Game : MonoBehaviour
         }
 
         return position;
+    }
+
+    public bool GameTimer()
+    {
+        turnTime -= Time.deltaTime;
+
+        if(turnTime >= 4.995 && turnTime <= 5.005)
+        {
+            Debug.Log("5 Seconds left");
+        }
+
+        if( turnTime >= -1.995 && turnTime <= 0.005)
+        {
+            turnTime = 30;
+            Debug.Log("Turn Over");
+            return true;
+        }
+
+        return false;
+
+
     }
 
 }
