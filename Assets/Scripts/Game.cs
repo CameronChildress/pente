@@ -38,6 +38,7 @@ public class Game : MonoBehaviour
 
     public void Update()
     {
+
        bool turnEnd = GameTimer();
 
 
@@ -113,6 +114,17 @@ public class Game : MonoBehaviour
                 break;
         }
 
+    }
+
+
+    public void PlacePiece(Vector2Int position)
+    {
+        if (position != -Vector2Int.one)
+        {
+            PiecePlaced(position);
+            isPlayer1 = !isPlayer1;
+        }
+        else Debug.Log("Position was negative: " + position.ToString());
     }
 
 
