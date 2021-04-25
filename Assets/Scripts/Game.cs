@@ -38,6 +38,7 @@ public class Game : MonoBehaviour
 
     public void Update()
     {
+
        bool turnEnd = GameTimer();
 
         switch (GameState)
@@ -105,7 +106,6 @@ public class Game : MonoBehaviour
                 break;
         }
     }
-
 
     public bool PiecePlaced(Vector2Int position, out int numOfCaptures, out bool isAWin)
     {
