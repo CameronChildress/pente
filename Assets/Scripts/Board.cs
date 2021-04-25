@@ -29,36 +29,45 @@ public class Board : MonoBehaviour
 
 
 
-    public bool PlacePiece(Vector2Int position, bool isPlayer1, out bool isCapture, out bool isWin)
+    public bool PlacePiece(Vector2Int position, bool isPlayer1, out int captures, out bool isWin)
     {
 
         isWin = false;
-        isCapture = false;
+        captures = 0;
+        BoardSpace.eSpaceState currentPlayer = isPlayer1 ? BoardSpace.eSpaceState.Player1 : BoardSpace.eSpaceState.Player2;
 
         //Player 1 places a piece
         if (isPlayer1 && spaces[position.x, position.y].state == BoardSpace.eSpaceState.Empty)
         {
             //set that position to player 1
-            spaces[position.x, position.y].state = BoardSpace.eSpaceState.Player1;
+            spaces[position.x, position.y].state = currentPlayer;
 
             //make a new piece object to appear on the board
-            Instantiate(p1Piece, new Vector3(30 * position.x, 30 * position.y, 0) + new Vector3(74, 74, 0), Quaternion.identity, this.transform);
+            spaces[position.x, position.y].pieceObject = Instantiate(p1Piece, new Vector3(30 * position.x, 30 * position.y, 0) + new Vector3(74, 74, 0), Quaternion.identity, this.transform);
 
             //Check if there is a win condition at that place
-            isWin = FindPenteWin(spaces, position.x, position.y, BoardSpace.eSpaceState.Player1, 5);
+            isWin = FindPenteWin(spaces, position.x, position.y, currentPlayer, 5);
 
             //Check for a capture
-            //isCapture = FindCapture()
+            captures = FindCapture(position, isPlayer1);
         }
         else if(!isPlayer1 && spaces[position.x, position.y].state == BoardSpace.eSpaceState.Empty) // Same for player 2
         {
-            spaces[position.x, position.y].state = BoardSpace.eSpaceState.Player2;
-            Instantiate(p2Piece, new Vector3(30 * position.x, 30 * position.y, 0) + new Vector3(74, 74, 0), Quaternion.identity, this.transform);
-            isWin = FindPenteWin(spaces, position.x, position.y, BoardSpace.eSpaceState.Player2, 5);
+            //set that position to player 2
+            spaces[position.x, position.y].state = currentPlayer;
+
+            //make a new piece object to appear on the board
+            spaces[position.x, position.y].pieceObject = Instantiate(p2Piece, new Vector3(30 * position.x, 30 * position.y, 0) + new Vector3(74, 74, 0), Quaternion.identity, this.transform);
+
+            //check for a match of 5 win
+            isWin = FindPenteWin(spaces, position.x, position.y, currentPlayer, 5);
+
+            //check for a capture
+            captures = FindCapture(position, isPlayer1);
         }
         else if(spaces[position.x, position.y].state == BoardSpace.eSpaceState.Player1 || spaces[position.x, position.y].state == BoardSpace.eSpaceState.Player2)
         {
-            isCapture = false;
+            captures = 0;
             isWin = false;
             return false;
         }
@@ -129,6 +138,54 @@ public class Board : MonoBehaviour
         return (matchCount >= matchAmount);
     }
 
+    int FindCapture(Vector2Int position, bool isPlayer1)
+    {
+        int captures = 0;
+        //set the states to correct ones
+        BoardSpace.eSpaceState current = isPlayer1 ? BoardSpace.eSpaceState.Player1 : BoardSpace.eSpaceState.Player2;
+        BoardSpace.eSpaceState other   = isPlayer1 ? BoardSpace.eSpaceState.Player2 : BoardSpace.eSpaceState.Player1;
+
+        //Horiz
+        if (FindCaptureDirection(position, current, other, 1, 0)) captures++;
+        if (FindCaptureDirection(position, current, other, -1, 0)) captures++;
+        //Vert
+        if (FindCaptureDirection(position, current, other, 0, 1)) captures++;
+        if (FindCaptureDirection(position, current, other, 0, -1)) captures++;
+        //Diagonal
+        if (FindCaptureDirection(position, current, other, 1, 1)) captures++;
+        if (FindCaptureDirection(position, current, other, 1, -1)) captures++;
+        if (FindCaptureDirection(position, current, other, -1, 1)) captures++;
+        if (FindCaptureDirection(position, current, other, -1, -1)) captures++;
+
+
+
+
+        return captures;
+    }
+
+
+    bool FindCaptureDirection(Vector2Int position, BoardSpace.eSpaceState current, BoardSpace.eSpaceState other, int xShift, int yShift)
+    {
+        //Horizontal facing right
+        //potentialCapture = FindLinearMatch(spaces, position.x + 1, position.y, other, 0, 1, 2, false);
+        bool potentialCapture = (spaces[position.x + xShift, position.y + yShift].state == other && spaces[position.x + (xShift * 2), position.y + (yShift * 2)].state == other);
+        if (potentialCapture)
+        {
+            //if the end is the same as the piece placed...
+            if (spaces[position.x  + (xShift * 3), position.y + (yShift * 3)].state == current)
+            {
+                //remove the in between pieces
+                spaces[position.x + xShift, position.y + yShift].state = BoardSpace.eSpaceState.Empty;
+                spaces[position.x + (xShift * 2), position.y + (yShift * 2)].state = BoardSpace.eSpaceState.Empty;
+
+                Destroy(spaces[position.x + xShift, position.y + yShift].pieceObject);
+                Destroy(spaces[position.x + (2 * xShift), position.y + (2 * yShift)].pieceObject);
+
+                return true;
+            }
+        }
+        return false;
+    }
 
 
 

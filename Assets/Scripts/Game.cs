@@ -98,9 +98,9 @@ public class Game : MonoBehaviour
 
     public bool PiecePlaced(Vector2Int position)
     {
-        bool success = Board.Instance.PlacePiece(position, isPlayer1, out bool isCapture, out bool isWin);
+        bool success = Board.Instance.PlacePiece(position, isPlayer1, out int captures, out bool isWin);
         string playername = isPlayer1 ? "player 1" : "player 2";
-        Debug.Log($"Capture for {playername}? : " + isCapture);
+        Debug.Log($"Captures for {playername} in this turn? : " + captures);
         Debug.Log($"Win for {playername}? : " + isWin);
         return success;
     }
