@@ -33,52 +33,18 @@ public class Game : MonoBehaviour
 
     public void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
+        
+
+    }
+
+    public void PlacePiece(Vector2Int position)
+    {
+        if (position != -Vector2Int.one)
         {
-            Vector2Int position = GetPosition();
-            if (position != -Vector2Int.one)
-            {
-                PiecePlaced(position);
-                isPlayer1 = !isPlayer1;
-            }
-            else Debug.Log("Position was negative: " + position.ToString());
+            PiecePlaced(position);
+            isPlayer1 = !isPlayer1;
         }
-        //switch (GameState)
-        //{
-        //    case eState.Title:
-        //        GameState = eState.StartGame;
-        //        break;
-        //    case eState.StartGame:
-        //        GameState = eState.Player1Turn;
-        //        break;
-        //    case eState.Player1Turn:
-        //        if (PiecePlaced(TakeTurn()))
-        //        {
-        //            GameState = eState.Player2Turn;
-        //        }
-        //        else
-        //        {
-
-        //        }
-        //        break;
-        //    case eState.Player2Turn:
-        //        if(PiecePlaced(TakeTurn()))
-        //        {
-        //            GameState = eState.Player1Turn;
-        //        }
-        //        else 
-        //        {
-                    
-        //        }
-        //        GameState = eState.Player1Turn;
-        //        break;
-        //    case eState.EndGame:
-        //        GameState = eState.Title;
-        //        break;
-        //    default:
-        //        break;
-        //}
-
+        else Debug.Log("Position was negative: " + position.ToString());
     }
 
     public Vector2Int GetPosition()
