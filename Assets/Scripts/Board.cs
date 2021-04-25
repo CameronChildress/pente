@@ -156,20 +156,27 @@ public class Board : MonoBehaviour
         BoardSpace.eSpaceState current = isPlayer1 ? BoardSpace.eSpaceState.Player1 : BoardSpace.eSpaceState.Player2;
         BoardSpace.eSpaceState other   = isPlayer1 ? BoardSpace.eSpaceState.Player2 : BoardSpace.eSpaceState.Player1;
 
-        //Horiz
-        if (FindCaptureDirection(position, current, other, 1, 0)) captures++;
-        if (FindCaptureDirection(position, current, other, -1, 0)) captures++;
-        //Vert
-        if (FindCaptureDirection(position, current, other, 0, 1)) captures++;
-        if (FindCaptureDirection(position, current, other, 0, -1)) captures++;
-        //Diagonal
-        if (FindCaptureDirection(position, current, other, 1, 1)) captures++;
-        if (FindCaptureDirection(position, current, other, 1, -1)) captures++;
-        if (FindCaptureDirection(position, current, other, -1, 1)) captures++;
-        if (FindCaptureDirection(position, current, other, -1, -1)) captures++;
+        if (position.x > 2)
+        {
+            if (FindCaptureDirection(position, current, other, -1, 0)) captures++;
+            if (position.y > 2) if (FindCaptureDirection(position, current, other, -1, -1)) captures++;
+        }
+        if (position.x < 17)
+        {
+            if (FindCaptureDirection(position, current, other, 1, 0)) captures++;
+            if (position.y < 17) if (FindCaptureDirection(position, current, other, 1, 1)) captures++;
+        }
 
-
-
+        if (position.y > 2)
+        {
+            if (FindCaptureDirection(position, current, other, 0, -1)) captures++;
+            if (position.x < 17) if (FindCaptureDirection(position, current, other, 1, -1)) captures++;
+        }
+        if (position.y < 17)
+        {
+            if (FindCaptureDirection(position, current, other, 0, 1)) captures++;
+            if (position.x > 2) if (FindCaptureDirection(position, current, other, -1, 1)) captures++;
+        }
 
         return captures;
     }

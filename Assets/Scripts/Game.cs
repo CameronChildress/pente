@@ -41,8 +41,6 @@ public class Game : MonoBehaviour
 
        bool turnEnd = GameTimer();
 
-
-
         switch (GameState)
         {
             case eState.Title:
@@ -52,14 +50,11 @@ public class Game : MonoBehaviour
                 GameState = eState.Player1Turn;
                 break;
             case eState.Player1Turn:
-
                 Debug.Log("Start Player 1 Turn");
-
                 if (turnEnd)
                 {
                     isPlayer1 = !isPlayer1;
                     GameState = eState.Player2Turn;
-
                 }
                 else
                 {
@@ -68,12 +63,12 @@ public class Game : MonoBehaviour
                         Vector2Int position = GetPosition();
                         if (position != -Vector2Int.one)
                         {
-                            PiecePlaced(position);
-                            GameState = eState.Player2Turn;
-
-                            turnTime = 30;
-
-                            isPlayer1 = !isPlayer1;
+                            if (!PiecePlaced(position, out int captures, out bool isWin))
+                            {
+                                GameState = eState.Player2Turn;
+                                turnTime = 30;
+                                isPlayer1 = !isPlayer1;
+                            }
                         }
                         else Debug.Log("Position was negative: " + position.ToString());
                     }
@@ -81,7 +76,6 @@ public class Game : MonoBehaviour
                 break;
             case eState.Player2Turn:
                 Debug.Log("Start Player 2 Turn");
-
                 if (turnEnd)
                 {
                     isPlayer1 = !isPlayer1;
@@ -89,23 +83,21 @@ public class Game : MonoBehaviour
                 }
                 else
                 {
-
                     if (Input.GetKeyDown(KeyCode.Return))
                     {
                         Vector2Int position = GetPosition();
                         if (position != -Vector2Int.one)
                         {
-                            PiecePlaced(position);
-                            GameState = eState.Player1Turn;
-
-                            turnTime = 30;
-
-                            isPlayer1 = !isPlayer1;
+                            if (PiecePlaced(position, out int captures, out bool isWin))
+                            {
+                                GameState = eState.Player1Turn;
+                                turnTime = 30;
+                                isPlayer1 = !isPlayer1;
+                            }
                         }
                         else Debug.Log("Position was negative: " + position.ToString());
                     }
                 }
-
                 break;
             case eState.EndGame:
                 GameState = eState.Title;
@@ -113,24 +105,13 @@ public class Game : MonoBehaviour
             default:
                 break;
         }
-
     }
 
-
-    public void PlacePiece(Vector2Int position)
-    {
-        if (position != -Vector2Int.one)
-        {
-            PiecePlaced(position);
-            isPlayer1 = !isPlayer1;
-        }
-        else Debug.Log("Position was negative: " + position.ToString());
-    }
-
-
-    public bool PiecePlaced(Vector2Int position)
+    public bool PiecePlaced(Vector2Int position, out int numOfCaptures, out bool isAWin)
     {
         bool success = Board.Instance.PlacePiece(position, isPlayer1, out int captures, out bool isWin);
+        numOfCaptures = captures;
+        isAWin = isWin;
         string playername = isPlayer1 ? "player 1" : "player 2";
         Debug.Log($"Captures for {playername} in this turn? : " + captures);
         Debug.Log($"Win for {playername}? : " + isWin);
