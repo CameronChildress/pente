@@ -10,6 +10,6 @@ public class BoardSpace : MonoBehaviour
     }
 
     public eSpaceState state = eSpaceState.Empty;
-    
+    public GameObject pieceObject;
 
 }
