@@ -1,8 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Timers;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class Game : MonoBehaviour
 {
@@ -15,16 +15,19 @@ public class Game : MonoBehaviour
         EndGame
     }
 
-    public static Game Instance { get { return instance; } }
-    private static Game instance;
-    
 
     //Variables
     public eState GameState { get; set; } = eState.Title;
+
+    public static Game Instance { get { return instance; } }
+    private static Game instance;
+
     public TMP_InputField InputX;
     public TMP_InputField InputY;
 
+    float turnTime = 30;
     bool isPlayer1 = true;
+    
 
     private void Awake()
     {
@@ -33,71 +36,121 @@ public class Game : MonoBehaviour
 
     public void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
+
+       bool turnEnd = GameTimer();
+
+        switch (GameState)
         {
-            Vector2Int position = GetPosition();
-            if (position != -Vector2Int.one)
-            {
-                PiecePlaced(position);
-                isPlayer1 = !isPlayer1;
-            }
-            else Debug.Log("Position was negative: " + position.ToString());
+            case eState.Title:
+                GameState = eState.StartGame;
+                break;
+            case eState.StartGame:
+                GameState = eState.Player1Turn;
+                break;
+            case eState.Player1Turn:
+                //Debug.Log("Start Player 1 Turn");
+                if (turnEnd)
+                {
+                    isPlayer1 = !isPlayer1;
+                    GameState = eState.Player2Turn;
+                }
+                else
+                {
+                    if (Input.GetMouseButtonDown(0))
+                    {
+
+                        Vector2Int position = PiecePlacer.GetMousePosition();
+                        if (position != -Vector2Int.one)
+                        {
+                            if (PiecePlaced(position, out int captures, out bool isWin))
+                            {
+                                GameState = eState.Player2Turn;
+                                turnTime = 30;
+                                isPlayer1 = !isPlayer1;
+                            }
+                        }
+                        else Debug.Log("Position was negative: " + position.ToString());
+                    }
+                }
+                break;
+            case eState.Player2Turn:
+                //Debug.Log("Start Player 2 Turn");
+                if (turnEnd)
+                {
+                    isPlayer1 = !isPlayer1;
+                    GameState = eState.Player1Turn;
+                }
+                else
+                {
+                    if (Input.GetMouseButtonDown(0))
+                    {
+                        Vector2Int position = PiecePlacer.GetMousePosition();
+                        if (position != -Vector2Int.one)
+                        {
+                            if (PiecePlaced(position, out int captures, out bool isWin))
+                            {
+                                GameState = eState.Player1Turn;
+                                turnTime = 30;
+                                isPlayer1 = !isPlayer1;
+                            }
+                        }
+                        else Debug.Log("Position was negative: " + position.ToString());
+                    }
+                }
+                break;
+            case eState.EndGame:
+                GameState = eState.Title;
+                break;
+            default:
+                break;
         }
-        //switch (GameState)
-        //{
-        //    case eState.Title:
-        //        GameState = eState.StartGame;
-        //        break;
-        //    case eState.StartGame:
-        //        GameState = eState.Player1Turn;
-        //        break;
-        //    case eState.Player1Turn:
-        //        if (PiecePlaced(TakeTurn()))
-        //        {
-        //            GameState = eState.Player2Turn;
-        //        }
-        //        else
-        //        {
-
-        //        }
-        //        break;
-        //    case eState.Player2Turn:
-        //        if(PiecePlaced(TakeTurn()))
-        //        {
-        //            GameState = eState.Player1Turn;
-        //        }
-        //        else 
-        //        {
-                    
-        //        }
-        //        GameState = eState.Player1Turn;
-        //        break;
-        //    case eState.EndGame:
-        //        GameState = eState.Title;
-        //        break;
-        //    default:
-        //        break;
-        //}
-
     }
 
-    public Vector2Int GetPosition()
+    public bool PiecePlaced(Vector2Int position, out int numOfCaptures, out bool isAWin)
     {
-        Vector2Int position = -Vector2Int.one;
+        bool success = Board.Instance.PlacePiece(position, isPlayer1, out int captures, out bool isWin);
+        numOfCaptures = captures;
+        isAWin = isWin;
+        string playername = isPlayer1 ? "player 1" : "player 2";
+        Debug.Log($"Captures for {playername} in this turn? : " + captures);
+        Debug.Log($"Win for {playername}? : " + isWin);
+        return success;
+    }
 
-        string xString = InputX.text;
-        string yString = InputY.text;
+    //public Vector2Int GetPosition()
+    //{
+    //    Vector2Int position = -Vector2Int.one;
 
-        if (int.TryParse(xString, out int x) && int.TryParse(yString, out int y))
+    //    string xString = InputX.text;
+    //    string yString = InputY.text;
+
+    //    if (int.TryParse(xString, out int x) && int.TryParse(yString, out int y))
+    //    {
+    //        position = new Vector2Int(x, y);
+    //    }
+
+    //    return position;
+    //}
+
+    public bool GameTimer()
+    {
+        turnTime -= Time.deltaTime;
+
+        if(turnTime >= 4.995 && turnTime <= 5.005)
         {
-            position = new Vector2Int(x, y);
+            Debug.Log("5 Seconds left");
         }
-        
-        return position;
+
+        if( turnTime >= -1.995 && turnTime <= 0.005)
+        {
+            turnTime = 30;
+            Debug.Log("Turn Over");
+            return true;
+        }
+
+        return false;
+
+
     }
 
-    public bool PiecePlaced(Vector2Int position)
-    {
-        return Board.Instance.PlacePiece(position, isPlayer1, out bool isCapture, out bool isWin);
-    }
 }
