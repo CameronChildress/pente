@@ -6,6 +6,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
+
 public class Game : MonoBehaviour
 {
     public enum eState
@@ -27,6 +28,9 @@ public class Game : MonoBehaviour
 
     public TMP_InputField InputX;
     public TMP_InputField InputY;
+
+    Player player1 = new Player();
+    Player player2 = new Player();
 
     public TMP_Text messageBox;
     public TMP_Text timerBox;
@@ -54,6 +58,7 @@ public class Game : MonoBehaviour
         {
             case eState.Title:
                 GameState = eState.StartGame;
+                
                 break;
             case eState.StartGame:
                 GameState = eState.Player1Turn;
@@ -85,6 +90,7 @@ public class Game : MonoBehaviour
                                 }
                                 turnTime = 30;
                                 isPlayer1 = !isPlayer1;
+                                player1.captures += 1;
                             }
                         }
                         else Debug.Log("Position was negative: " + position.ToString());
@@ -117,6 +123,7 @@ public class Game : MonoBehaviour
                                 }
                                 turnTime = 30;
                                 isPlayer1 = !isPlayer1;
+                                player2.captures += 1;
                             }
                         }
                         else Debug.Log("Position was negative: " + position.ToString());

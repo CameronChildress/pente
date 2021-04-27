@@ -1658,6 +1658,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   InputX: {fileID: 803414924}
   InputY: {fileID: 408468324}
+  player1: {fileID: 0}
+  player2: {fileID: 0}
   messageBox: {fileID: 60702419}
   timerBox: {fileID: 1522857398}
   player1name: {fileID: 11400000, guid: 31bc07a2e86d3b64a9994f541dc9680b, type: 2}

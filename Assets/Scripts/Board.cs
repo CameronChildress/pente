@@ -141,6 +141,8 @@ public class Board : MonoBehaviour
             col = startCol + (colShift * flip * -1);
         }
 
+        if (matchCount == 3) Debug.Log("Tria");
+        if (matchCount == 4) Debug.Log("Tessera");
         return (matchCount >= matchAmount);
     }
 
