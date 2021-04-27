@@ -19,13 +19,11 @@ public class Game : MonoBehaviour
     //Variables
     public eState GameState { get; set; } = eState.Title;
 
-    public Game Instance { get { return instance; } }
-    private Game instance;
+    public static Game Instance { get { return instance; } }
+    private static Game instance;
 
     public TMP_InputField InputX;
     public TMP_InputField InputY;
-
-
 
     float turnTime = 30;
     bool isPlayer1 = true;
@@ -50,7 +48,7 @@ public class Game : MonoBehaviour
                 GameState = eState.Player1Turn;
                 break;
             case eState.Player1Turn:
-                Debug.Log("Start Player 1 Turn");
+                //Debug.Log("Start Player 1 Turn");
                 if (turnEnd)
                 {
                     isPlayer1 = !isPlayer1;
@@ -58,12 +56,13 @@ public class Game : MonoBehaviour
                 }
                 else
                 {
-                    if (Input.GetKeyDown(KeyCode.Return))
+                    if (Input.GetMouseButtonDown(0))
                     {
-                        Vector2Int position = GetPosition();
+
+                        Vector2Int position = PiecePlacer.GetMousePosition();
                         if (position != -Vector2Int.one)
                         {
-                            if (!PiecePlaced(position, out int captures, out bool isWin))
+                            if (PiecePlaced(position, out int captures, out bool isWin))
                             {
                                 GameState = eState.Player2Turn;
                                 turnTime = 30;
@@ -75,7 +74,7 @@ public class Game : MonoBehaviour
                 }
                 break;
             case eState.Player2Turn:
-                Debug.Log("Start Player 2 Turn");
+                //Debug.Log("Start Player 2 Turn");
                 if (turnEnd)
                 {
                     isPlayer1 = !isPlayer1;
@@ -83,9 +82,9 @@ public class Game : MonoBehaviour
                 }
                 else
                 {
-                    if (Input.GetKeyDown(KeyCode.Return))
+                    if (Input.GetMouseButtonDown(0))
                     {
-                        Vector2Int position = GetPosition();
+                        Vector2Int position = PiecePlacer.GetMousePosition();
                         if (position != -Vector2Int.one)
                         {
                             if (PiecePlaced(position, out int captures, out bool isWin))
@@ -118,20 +117,20 @@ public class Game : MonoBehaviour
         return success;
     }
 
-    public Vector2Int GetPosition()
-    {
-        Vector2Int position = -Vector2Int.one;
+    //public Vector2Int GetPosition()
+    //{
+    //    Vector2Int position = -Vector2Int.one;
 
-        string xString = InputX.text;
-        string yString = InputY.text;
+    //    string xString = InputX.text;
+    //    string yString = InputY.text;
 
-        if (int.TryParse(xString, out int x) && int.TryParse(yString, out int y))
-        {
-            position = new Vector2Int(x, y);
-        }
+    //    if (int.TryParse(xString, out int x) && int.TryParse(yString, out int y))
+    //    {
+    //        position = new Vector2Int(x, y);
+    //    }
 
-        return position;
-    }
+    //    return position;
+    //}
 
     public bool GameTimer()
     {

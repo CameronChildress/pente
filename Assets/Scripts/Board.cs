@@ -46,12 +46,12 @@ public class Board : MonoBehaviour
             //make a new piece object to appear on the board
           
 
+            //change space state
+            spaces[position.x, position.y].state = BoardSpace.eSpaceState.Player1;
+            spaces[position.x, position.y].pieceObject = Instantiate(p1Piece, new Vector3(19.6f * position.x, 19.6f * position.y, 0) + new Vector3(48, 48, 0), Quaternion.identity, this.transform);
+
             //Check if there is a win condition at that place
             isWin = FindPenteWin(spaces, position.x, position.y, currentPlayer, 5);
-
-            spaces[position.x, position.y].state = BoardSpace.eSpaceState.Player1;
-            Instantiate(p1Piece, new Vector3(19.6f * position.x, 19.6f * position.y, 0) + new Vector3(48, 48, 0), Quaternion.identity, this.transform);
-            //Debug.Log("My nuts player 1");
 
             //Check for a capture
             captures = FindCapture(position, isPlayer1);
@@ -62,13 +62,8 @@ public class Board : MonoBehaviour
             //set that position to player 2
             spaces[position.x, position.y].state = currentPlayer;
 
-            
-            Instantiate(p2Piece, new Vector3(19.6f * position.x, 19.6f * position.y, 0) + new Vector3(48, 48, 0), Quaternion.identity, this.transform);
-            //Debug.Log("My nuts player 2");
-
-
             //make a new piece object to appear on the board
-            spaces[position.x, position.y].pieceObject = Instantiate(p2Piece, new Vector3(30 * position.x, 30 * position.y, 0) + new Vector3(74, 74, 0), Quaternion.identity, this.transform);
+            spaces[position.x, position.y].pieceObject = Instantiate(p2Piece, new Vector3(19.6f * position.x, 19.6f * position.y, 0) + new Vector3(48, 48, 0), Quaternion.identity, this.transform);
 
             //check for a match of 5 win
             isWin = FindPenteWin(spaces, position.x, position.y, currentPlayer, 5);
