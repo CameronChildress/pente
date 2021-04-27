@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    public string playerName;
-    public int captures;
-    public bool won;
+    public string playerName = "";
+    public int captures = 0;
+    public bool won = false;
 
 }
