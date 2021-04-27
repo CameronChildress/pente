@@ -1317,6 +1317,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   p1Piece: {fileID: 7718820103341549385, guid: d9cb4379ab5dd9c4a933b11640373a69, type: 3}
   p2Piece: {fileID: 5444094004908141722, guid: 947a5afc05fcf6140bef94820f23798a, type: 3}
+  messageBox: {fileID: 60702419}
 --- !u!1 &803414922
 GameObject:
   m_ObjectHideFlags: 0
