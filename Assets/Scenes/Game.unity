@@ -1658,10 +1658,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   InputX: {fileID: 803414924}
   InputY: {fileID: 408468324}
-  player1: {fileID: 0}
-  player2: {fileID: 0}
   messageBox: {fileID: 60702419}
   timerBox: {fileID: 1522857398}
+  p1CaptureBox: {fileID: 1178998341}
+  p2CaptureBox: {fileID: 1672940379}
   player1name: {fileID: 11400000, guid: 31bc07a2e86d3b64a9994f541dc9680b, type: 2}
   player2name: {fileID: 11400000, guid: c7d9408c4c5538043a5759b948ef9829, type: 2}
   btnRematch: {fileID: 1812048170}
@@ -1843,6 +1843,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   stringData: {fileID: 11400000, guid: c7d9408c4c5538043a5759b948ef9829, type: 2}
   textBox: {fileID: 1126625396}
+--- !u!114 &1178998341 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1671912593642556524, guid: 305c5b06fc71ec1418a6f45c53aa9bd4, type: 3}
+  m_PrefabInstance: {fileID: 122075251}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1522857397
 GameObject:
   m_ObjectHideFlags: 0
@@ -1977,6 +1988,17 @@ RectTransform:
   m_AnchoredPosition: {x: 137.4, y: -189}
   m_SizeDelta: {x: 60, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1672940379 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8792838038066733843, guid: 9f5c67a5d0d5bbc4d9e357e327ef011d, type: 3}
+  m_PrefabInstance: {fileID: 1126625393}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1742369056
 GameObject:
   m_ObjectHideFlags: 0

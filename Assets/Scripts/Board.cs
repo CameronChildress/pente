@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class Board : MonoBehaviour
@@ -8,6 +9,8 @@ public class Board : MonoBehaviour
     private static Board instance;
     public GameObject p1Piece;
     public GameObject p2Piece;
+
+    public TMP_Text messageBox;
 
     private BoardSpace[,] spaces = new BoardSpace[19, 19];
 
@@ -141,8 +144,8 @@ public class Board : MonoBehaviour
             col = startCol + (colShift * flip * -1);
         }
 
-        if (matchCount == 3) Debug.Log("Tria");
-        if (matchCount == 4) Debug.Log("Tessera");
+        if (matchCount == 3) messageBox.text = "Tria";
+        if (matchCount == 4) messageBox.text = "Tessera";
         return (matchCount >= matchAmount);
     }
 

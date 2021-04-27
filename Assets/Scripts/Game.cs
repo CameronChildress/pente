@@ -34,6 +34,8 @@ public class Game : MonoBehaviour
 
     public TMP_Text messageBox;
     public TMP_Text timerBox;
+    public TMP_Text p1CaptureBox;
+    public TMP_Text p2CaptureBox;
 
     public StringData player1name;
     public StringData player2name;
@@ -80,7 +82,7 @@ public class Game : MonoBehaviour
                         {
                             if (PiecePlaced(position, out int captures, out bool isWin))
                             {
-                                if (isWin)
+                                if (isWin || player1.captures == 5)
                                 {
                                     GameState = eState.EndGame;
                                 }
@@ -90,7 +92,8 @@ public class Game : MonoBehaviour
                                 }
                                 turnTime = 30;
                                 isPlayer1 = !isPlayer1;
-                                player1.captures += 1;
+                                player1.captures += captures;
+                                p1CaptureBox.text = player1.captures + "x";
                             }
                         }
                         else Debug.Log("Position was negative: " + position.ToString());
@@ -113,7 +116,7 @@ public class Game : MonoBehaviour
                         {
                             if (PiecePlaced(position, out int captures, out bool isWin))
                             {
-                                if (isWin)
+                                if (isWin || player2.captures == 5)
                                 {
                                     GameState = eState.EndGame;
                                 }
@@ -123,7 +126,8 @@ public class Game : MonoBehaviour
                                 }
                                 turnTime = 30;
                                 isPlayer1 = !isPlayer1;
-                                player2.captures += 1;
+                                player2.captures += captures;
+                                p2CaptureBox.text = player2.captures + "x";
                             }
                         }
                         else Debug.Log("Position was negative: " + position.ToString());
