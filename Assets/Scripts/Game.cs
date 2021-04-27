@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Timers;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 
 public class Game : MonoBehaviour
@@ -17,6 +19,7 @@ public class Game : MonoBehaviour
     }
 
 
+
     //Variables
     public eState GameState { get; set; } = eState.Title;
 
@@ -26,12 +29,16 @@ public class Game : MonoBehaviour
     public TMP_InputField InputX;
     public TMP_InputField InputY;
 
-    public StringData player1Data;
-    public StringData player2Data;
-
-
     Player player1 = new Player();
     Player player2 = new Player();
+
+    public TMP_Text messageBox;
+    public TMP_Text timerBox;
+
+    public StringData player1name;
+    public StringData player2name;
+
+    public GameObject btnRematch;
 
     float turnTime = 30;
     bool isPlayer1 = true;
@@ -73,7 +80,14 @@ public class Game : MonoBehaviour
                         {
                             if (PiecePlaced(position, out int captures, out bool isWin))
                             {
-                                GameState = eState.Player2Turn;
+                                if (isWin)
+                                {
+                                    GameState = eState.EndGame;
+                                }
+                                else
+                                {
+                                    GameState = eState.Player2Turn;
+                                }
                                 turnTime = 30;
                                 isPlayer1 = !isPlayer1;
                                 player1.captures += 1;
@@ -99,7 +113,14 @@ public class Game : MonoBehaviour
                         {
                             if (PiecePlaced(position, out int captures, out bool isWin))
                             {
-                                GameState = eState.Player1Turn;
+                                if (isWin)
+                                {
+                                    GameState = eState.EndGame;
+                                }
+                                else
+                                {
+                                    GameState = eState.Player1Turn;
+                                }
                                 turnTime = 30;
                                 isPlayer1 = !isPlayer1;
                                 player2.captures += 1;
@@ -110,7 +131,8 @@ public class Game : MonoBehaviour
                 }
                 break;
             case eState.EndGame:
-                GameState = eState.Title;
+                //GameState = eState.Title;
+                btnRematch.SetActive(true); ;
                 break;
             default:
                 break;
@@ -122,9 +144,13 @@ public class Game : MonoBehaviour
         bool success = Board.Instance.PlacePiece(position, isPlayer1, out int captures, out bool isWin);
         numOfCaptures = captures;
         isAWin = isWin;
-        string playername = isPlayer1 ? "player 1" : "player 2";
-        Debug.Log($"Captures for {playername} in this turn? : " + captures);
-        Debug.Log($"Win for {playername}? : " + isWin);
+        string playername = isPlayer1 ? player1name.value : player2name.value;
+        //Debug.Log($"Captures for {playername} in this turn? : " + captures);
+        if (isWin)
+        {
+            messageBox.text = $"Win for {playername}!";
+            GameState = eState.EndGame;
+        }
         return success;
     }
 
@@ -147,21 +173,28 @@ public class Game : MonoBehaviour
     {
         turnTime -= Time.deltaTime;
 
+        timerBox.text = "" + (int) turnTime;
+
         if(turnTime >= 4.995 && turnTime <= 5.005)
         {
-            Debug.Log("5 Seconds left");
+            messageBox.text = "5 Seconds left";
         }
 
         if( turnTime >= -1.995 && turnTime <= 0.005)
         {
+            messageBox.text = "New Turn";
             turnTime = 30;
-            Debug.Log("Turn Over");
             return true;
         }
 
         return false;
 
 
+    }
+
+    public void Restart()
+    {
+        SceneManager.LoadScene("Game");
     }
 
 }
