@@ -25,6 +25,9 @@ public class Game : MonoBehaviour
     public TMP_InputField InputX;
     public TMP_InputField InputY;
 
+    public Player player1;
+    public Player player2;
+
     float turnTime = 30;
     bool isPlayer1 = true;
     
