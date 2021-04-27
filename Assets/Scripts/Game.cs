@@ -4,6 +4,7 @@ using System.Timers;
 using TMPro;
 using UnityEngine;
 
+
 public class Game : MonoBehaviour
 {
     public enum eState
@@ -25,6 +26,13 @@ public class Game : MonoBehaviour
     public TMP_InputField InputX;
     public TMP_InputField InputY;
 
+    public StringData player1Data;
+    public StringData player2Data;
+
+
+    Player player1 = new Player();
+    Player player2 = new Player();
+
     float turnTime = 30;
     bool isPlayer1 = true;
     
@@ -43,6 +51,7 @@ public class Game : MonoBehaviour
         {
             case eState.Title:
                 GameState = eState.StartGame;
+                
                 break;
             case eState.StartGame:
                 GameState = eState.Player1Turn;
@@ -67,6 +76,7 @@ public class Game : MonoBehaviour
                                 GameState = eState.Player2Turn;
                                 turnTime = 30;
                                 isPlayer1 = !isPlayer1;
+                                player1.captures += 1;
                             }
                         }
                         else Debug.Log("Position was negative: " + position.ToString());
@@ -92,6 +102,7 @@ public class Game : MonoBehaviour
                                 GameState = eState.Player1Turn;
                                 turnTime = 30;
                                 isPlayer1 = !isPlayer1;
+                                player2.captures += 1;
                             }
                         }
                         else Debug.Log("Position was negative: " + position.ToString());

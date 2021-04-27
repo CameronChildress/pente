@@ -1655,6 +1655,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   InputX: {fileID: 803414924}
   InputY: {fileID: 408468324}
+  player1Data: {fileID: 11400000, guid: 31bc07a2e86d3b64a9994f541dc9680b, type: 2}
+  player2Data: {fileID: 11400000, guid: c7d9408c4c5538043a5759b948ef9829, type: 2}
+  player1: {fileID: 0}
+  player2: {fileID: 0}
 --- !u!4 &1021595708
 Transform:
   m_ObjectHideFlags: 0
